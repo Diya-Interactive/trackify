@@ -1,0 +1,12 @@
+@keyframes slide-marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-slide-marquee {
+  animation: slide-marquee 8s linear infinite;
+}

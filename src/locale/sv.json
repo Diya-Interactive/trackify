@@ -1,0 +1,16 @@
+{
+    "login_to_account": "Logga in på ditt konto",
+    "enter_credentials": "Ange dina inloggningsuppgifter för att fortsätta",
+    "email_address": "E-postadress",
+    "enter_email": "Ange din e-postadress",
+    "password": "Lösenord",
+    "enter_password": "Ange ditt lösenord",
+    "login": "Logga in",
+    "otp": "Engångskod",
+    "enter_otp": "Ange din engångskod",
+    "verify": "Verifiera",
+    "send_otp": "Skicka engångskod",
+    "enter_otp_code": "Ange engångskod",
+    "please_enter_the_6_character_code_we_sent_you": "Ange den 6-siffriga koden vi skickade till dig:",
+    "submit": "Skicka"
+}
