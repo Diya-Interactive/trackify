@@ -39,4 +39,8 @@ export type columns = {
     iterationPath: string;
     efforts: string | number;
     teamLead: string;
+    projectId: string; 
+    description: string;
+    timeInterval : any;
+    _id:string;
 };

@@ -1,40 +1,41 @@
-import type { columns, ColumnType } from "../../types/table"
+import type { columns, ColumnType } from "../../types/table";
+import moment from "moment";
 
 export const getProjectColumns: ColumnType<columns>[] = [
     {
         key: "projectName",
-        title: "Project Name",
+        title: "Title/ User Story",
         dataIndex: "projectName",
         sortable: true,
         className: "w-[200px]",
         render: (_: unknown, record: columns) => (
             <div className="flex items-center justify-start gap-2">
-                   {record?.projectName} 
+                {record?.projectName}
             </div>
         ),
     },
     {
-        key: "projectCode",
+        key: "projectId",
         title: "Project Code",
-        dataIndex: "projectCode",
+        dataIndex: "projectId",
         sortable: true,
         className: "w-[150px]",
     },
     {
-        key: "taskName",
+        key: "description",
         title: "Task Name",
-        dataIndex: "taskName",
+        dataIndex: "description",
         sortable: true,
         className: "w-[200px]",
     },
     {
         key: "tile",
-        title: "Tile",
+        title: "ID/Ref",
         dataIndex: "tile",
         sortable: false,
         className: "w-[100px]",
         render: (_: unknown, record: columns) => (
-            <span>{record.tile ? "✅" : "❌"}</span>
+            <span>{record?._id}</span>
         ),
     },
     {
@@ -60,9 +61,21 @@ export const getProjectColumns: ColumnType<columns>[] = [
         dataIndex: "efforts",
         sortable: true,
         className: "w-[100px]",
-        render: (_: unknown, record: columns) => (
-            <span>{record.efforts} hrs</span>
-        ),
+        render: (_: unknown, record: columns) => {
+            const duration = moment.duration(Number(record.timeInterval?.duration), "seconds");
+
+            const hours = duration.hours();
+            const minutes = duration.minutes();
+            const seconds = duration.seconds();
+
+            const formatted =
+                `${hours > 0 ? `${hours}h ` : ""}` +
+                `${minutes > 0 ? `${minutes}m ` : ""}` +
+                `${seconds > 0 ? `${seconds}s` : ""}` ||
+                "0s";
+
+            return <span>{formatted.trim()}</span>;
+        },
     },
     {
         key: "teamLead",
@@ -76,6 +89,12 @@ export const getProjectColumns: ColumnType<columns>[] = [
         title: "Date",
         dataIndex: "date",
         sortable: true,
-        className: "w-[150px]",
-    }
+        className: "w-[200px]",
+        render: (_: unknown, record: columns) => (
+            <div className="flex flex-col">
+                <span>{moment(record?.timeInterval?.start).format("MM-DD-YYYY hh:mm A")}</span>
+                <span>{moment(record?.timeInterval?.end).format("MM-DD-YYYY hh:mm A")}</span>
+            </div>
+        ),
+    },
 ];

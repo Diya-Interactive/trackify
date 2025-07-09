@@ -7,6 +7,7 @@ import { useToast } from "../../hooks/useToast";
 import useLoader from "../../hooks/useLoader";
 import { getErrorMessage } from "../../utils/globalFunctions";
 import { fetchRecords, fetchUsers } from "../../services/api/dashboard";
+import * as XLSX from 'xlsx';
 
 const Dashboard: React.FC = () => {
     const [data, setData] = useState([]);
@@ -37,10 +38,10 @@ const Dashboard: React.FC = () => {
             showLoader();
             const request = {
                 users: {
-                    ids: selectedUserIds, // raza bhau se bind karege ise
+                    ids: selectedUserIds,
                 },
-                dateRangeStart: startDate, // raza bhau se bind karege ise
-                dateRangeEnd: endDate, // raza bhau se bind karege ise
+                dateRangeStart: startDate,
+                dateRangeEnd: endDate,
                 detailedFilter: {
                     page: currentPage,
                     sortColumn: "User",
@@ -49,7 +50,7 @@ const Dashboard: React.FC = () => {
             };
             const response = await fetchRecords(request);
             if (response) {
-                setData(response?.data?.timeentries);
+                setData(response?.timeentries);
                 setTotalCount(response?.entriesCount);
             }
         } catch (error: unknown) {
@@ -57,28 +58,17 @@ const Dashboard: React.FC = () => {
         } finally {
             hideLoader();
         }
-        /* try {
-                  showLoader();
-                  
-            
-                  const response = await companyList(
-                    currentPage,
-                    pageSize,
-                    searchQuery,
-                    industryValue as string | number,
-                    sortBy,
-                    sortOrder
-                  );
-            
-                  if (response?.success) {
-                    setListingData(response?.data?.results);
-                    setTotalCount(response?.data?.count);
-                  }
-                } catch (error: unknown) {
-                  showToast(getErrorMessage(error), "error");
-                } finally {
-                  hideLoader();
-                } */
+    };
+
+    const handleExportToExcel = () => {
+        try {
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, "TimeEntries");
+            XLSX.writeFile(wb, `TimeEntries_${new Date().toISOString().split('T')[0]}.xlsx`);
+        } catch (error) {
+            showToast("Failed to export data", "error");
+        }
     };
 
     const handleSortChange = (
@@ -128,13 +118,22 @@ const Dashboard: React.FC = () => {
                     </div>
                     <div>
                         <div className="opacity-0">button</div>
-                        <button
-                            className="py-2 px-4 bg-blue-600 text-white rounded-lg"
-                            onClick={fetchUserClockifyList}
-                            disabled={loading}
-                        >
-                            {loading ? "Loading..." : "Fetch Report"}
-                        </button>
+                        <div className="flex gap-2">
+                            <button
+                                className="py-2 px-4 bg-blue-600 text-white rounded-lg"
+                                onClick={fetchUserClockifyList}
+                                disabled={loading}
+                            >
+                                {loading ? "Loading..." : "Fetch Report"}
+                            </button>
+                            <button
+                                className="py-2 px-4 bg-green-600 text-white rounded-lg"
+                                onClick={handleExportToExcel}
+                                disabled={!data.length}
+                            >
+                                Export Excel
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
