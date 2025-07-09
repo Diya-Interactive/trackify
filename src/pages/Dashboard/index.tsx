@@ -33,6 +33,7 @@ const Dashboard: React.FC = () => {
             .catch(() => setUsers([]));
     }, []);
 
+
     const fetchUserClockifyList = async () => {
         try {
             showLoader();
@@ -51,7 +52,7 @@ const Dashboard: React.FC = () => {
             const response = await fetchRecords(request);
             if (response) {
                 setData(response?.timeentries);
-                setTotalCount(response?.entriesCount);
+                setTotalCount(response?.totals[0]?.entriesCount);
             }
         } catch (error: unknown) {
             showToast(getErrorMessage(error), "error");
@@ -79,6 +80,14 @@ const Dashboard: React.FC = () => {
         setSortBy(columnKey);
         setCurrentPage(1);
     };
+
+    useEffect(() => {
+        if (selectedUserIds.length > 0) {
+            fetchUserClockifyList();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pageSize, currentPage]);
+
     return (
         <>
             <div className="">
@@ -151,8 +160,6 @@ const Dashboard: React.FC = () => {
                     onSortChange={handleSortChange}
                 />
             </div>
-
-
         </>
     );
 };
