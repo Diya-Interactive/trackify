@@ -23,3 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 .env*
+.env.develop
+.env.download
+.env.prod
+.env.staging
+.env.local
