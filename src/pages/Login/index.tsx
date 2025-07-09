@@ -1,5 +1,4 @@
 import Modal from "../../components/Modal";
-import { Google } from "../../assets/icons";
 import useLoader from "../../hooks/useLoader";
 import { useTranslation } from "react-i18next";
 import { useToast } from "../../hooks/useToast";
@@ -20,8 +19,6 @@ import {
 } from "../../features/authSlice";
 import {
   getErrorMessage,
-  getGoogleErrorMessage,
-  signInWithGoogle,
   validateFormData,
 } from "../../utils/globalFunctions";
 
@@ -38,11 +35,10 @@ const Login: React.FC = () => {
   const dispatch = useAppDispatch();
   const { showLoader, hideLoader } = useLoader();
   const inputEmailRef = useRef<HTMLInputElement>(null);
-  const inputPasswordRef = useRef<HTMLInputElement>(null);
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
   const {
     otp,
-    formData: { email, password },
+    formData: { email },
   } = useAppSelector((state) => state.login);
 
   useEffect(() => {
@@ -82,7 +78,6 @@ const Login: React.FC = () => {
   const validateForm = () => {
     const { isValid, errors, messages, firstInvalidField } = validateFormData({
       email,
-      password,
     });
 
     setErrors(errors);
@@ -90,7 +85,6 @@ const Login: React.FC = () => {
 
     if (!isValid) {
       if (firstInvalidField === "email") inputEmailRef.current?.focus();
-      if (firstInvalidField === "password") inputPasswordRef.current?.focus();
       return false;
     }
 
@@ -222,16 +216,6 @@ const Login: React.FC = () => {
     }
   };
 
-  const handleGoogleLogin = async () => {
-    try {
-      const user = await signInWithGoogle();
-      console.log("User signed in:", user);
-    } catch (error: unknown) {
-      const errorMessage = await getGoogleErrorMessage(error);
-      showToast(errorMessage, "error");
-    }
-  };
-
   return (
     <>
       <div className="mt-20 sm:mt-32 bg-white dark:bg-gray-800 shadow-xl rounded-xl p-6 sm:p-8 w-full max-w-md space-y-6">
@@ -254,22 +238,6 @@ const Login: React.FC = () => {
             {t("enter_credentials")}
           </p>
         </div>
-        <div>
-          <button
-            onClick={handleGoogleLogin}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2  bg-white text-gray-700 border border-gray-300 dark:bg-gray-800 dark:text-white dark:border-gray-600 rounded-md shadow-sm hover:bg-gray-100 dark:hover:bg-gray-700  transition duration-200"
-          >
-            <Google size={24} />
-            {t("sign_in_with_google")}
-          </button>
-        </div>
-        <div className="flex items-center my-6">
-          <hr className="flex-grow border-t border-gray-300 dark:border-gray-600" />
-          <span className="mx-4 text-gray-500 dark:text-gray-400 text-sm">
-            {t("or")}
-          </span>
-          <hr className="flex-grow border-t border-gray-300 dark:border-gray-600" />
-        </div>
         <form onSubmit={onSubmit} className="space-y-5">
           <div>
             <InputField
@@ -286,20 +254,6 @@ const Login: React.FC = () => {
             />
           </div>
           <div>
-            <InputField
-              required
-              name="password"
-              type="password"
-              error={errors?.password}
-              value={password}
-              inputRef={inputPasswordRef}
-              label={t("password")}
-              placeholder={t("enter_password")}
-              errorMessage={errorMessages?.password}
-              onChange={(value) => handleChange(value, "password")}
-            />
-          </div>
-          <div>
             <button
               type="submit"
               className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition disabled:opacity-50"
@@ -308,13 +262,7 @@ const Login: React.FC = () => {
             </button>
           </div>
         </form>
-        <div className="flex items-center justify-between">
-          <Link
-            to="/forgotten-password"
-            className="text-sm text-gray-600 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
-          >
-            {t("forgotten_password")}
-          </Link>
+        <div className="flex items-center justify-end">
           <Link
             to="/create-an-account"
             className="text-sm text-gray-600 hover:text-gray-900 hover:underline dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
