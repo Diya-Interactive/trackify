@@ -26,5 +26,7 @@
     "register_to_account": "Register to your account",
     "name": "Name",
     "enter_name": "Enter your name",
-    "register": "Register"
+    "register": "Register",
+    "show_per_page": "Show per page",
+    "total": "Total"
 }
