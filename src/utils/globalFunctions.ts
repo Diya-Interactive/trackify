@@ -3,6 +3,7 @@ import type {
     LoginFormErrors,
     LoginFormMessages,
 } from "../types/Form";
+import { http } from "../config/httpMethod";
 
 export function getErrorMessage(error: unknown): string {
     const apiMessage = (error as { response?: { data?: { message?: string } } })
@@ -61,3 +62,19 @@ export const validateFormData = (
         firstInvalidField,
     };
 };
+
+export async function fetchClockifyUsers() {
+    try {
+        const response = await http.get(
+            "https://api.clockify.me/api/v1/workspaces/5c3598b1b079874ebde1c173/users",
+            {
+                headers: {
+                    "X-Api-Key": "YzZiMjUxMzItOGVmMy00NTdmLWIzZGItZGZkODgwZmE5MzMx",
+                },
+            }
+        );
+        return response.data; // Array of user objects
+    } catch (error) {
+        throw error;
+    }
+}
