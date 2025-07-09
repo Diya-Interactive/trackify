@@ -59,7 +59,7 @@ const Select: React.FC<SelectProps> = ({
   return (
     <div ref={ref} style={{ position: "relative", minWidth: 220 }}>
       <div
-        className="px-4 py-2 border rounded-md bg-white dark:bg-gray-800 text-black dark:text-white w-full focus:outline-none"
+        className="overflow-auto h-[45px] px-4 py-2 border rounded-md bg-white dark:bg-gray-800 text-black dark:text-white w-full focus:outline-none"
         style={{
           border: "1px solid #ccc",
           display: "flex",
