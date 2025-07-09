@@ -7,7 +7,7 @@ const Layout: React.FC = () => {
     const [collapsed, setCollapsed] = useState(false);
 
     return (
-        <div className="flex h-screen bg-[#DCDCDA] dark:bg-gray-600">
+        <div className="flex h-screen bg-[#DCDCDA] dark:bg-gray-600 w-screen ">
             {/* Sidebar (Hidden on mobile) */}
             <div className="h-full bg-white dark:bg-gray-800 shadow-md hidden lg:block">
                 <Sidebar collapsed={collapsed} />

@@ -10,4 +10,6 @@ export interface InputFieldProps {
     value: string | number;
     inputRef?: React.Ref<HTMLInputElement>;
     onChange: (value: string, name?: string ) => void;
+    min?: string;
+    max?: string;
 }

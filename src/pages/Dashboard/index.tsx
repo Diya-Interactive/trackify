@@ -16,8 +16,8 @@ const Dashboard: React.FC = () => {
     const [totalCount, setTotalCount] = useState(0);
     const [sortOrder, setSortOrder] = useState<string>("");
     const [sortBy, setSortBy] = useState<string>("");
-    const [startDate, setStartDate] = useState("2025-06-01T00:00:00Z");
-    const [endDate, setEndDate] = useState("2025-06-30T23:59:59Z");
+    const [startDate, setStartDate] = useState(new Date().toISOString());
+    const [endDate, setEndDate] = useState(startDate);
     const [report, setReport] = useState<any>(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -81,27 +81,28 @@ const Dashboard: React.FC = () => {
     };
     return (
         <>
-            <div className="m-auto">
-                <div className="grid w-[96%] m-auto justify-center items-center grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+            <div className="">
+                <div className="grid justify-center items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
                     <InputField
                         name="startDate"
                         label="Start Date"
-                        type="datetime-local"
-                        value={startDate.slice(0, 16)}
+                        type="date"
+                        value={startDate.slice(0, 10)}
                         onChange={(val) =>
-                            setStartDate(new Date(val).toISOString().slice(0, 16) + ":00Z")
+                            setStartDate(new Date(val + "T00:00:00Z").toISOString())
                         }
                     />
                     <InputField
                         name="endDate"
                         label="End Date"
-                        type="datetime-local"
-                        value={endDate.slice(0, 16)}
+                        type="date"
+                        value={endDate.slice(0, 10) < startDate.slice(0, 10) ? startDate.slice(0, 10) : endDate.slice(0, 10)}
+                        min={startDate.slice(0, 10)}
                         onChange={(val) =>
-                            setEndDate(new Date(val).toISOString().slice(0, 16) + ":59Z")
+                            setEndDate(new Date(val + "T23:59:59Z").toISOString())
                         }
                     />
-                    <div>
+                    <div className="z-20">
                         <label className="mb-1 text-sm font-medium text-[#232323] dark:text-gray-200">
                             Select Users
                         </label>
@@ -136,20 +137,22 @@ const Dashboard: React.FC = () => {
                         </div>
                     </div>
                 </div>
+                <Table
+                    columns={getProjectColumns}
+                    dataSource={data ?? []}
+                    currentPage={currentPage}
+                    pageSize={pageSize}
+                    totalCount={totalCount}
+                    onPageChange={(page) => setCurrentPage(page)}
+                    onPageSizeChange={(size) => {
+                        setPageSize(size);
+                        setCurrentPage(1);
+                    }}
+                    onSortChange={handleSortChange}
+                />
             </div>
-            <Table
-                columns={getProjectColumns}
-                dataSource={data ?? []}
-                currentPage={currentPage}
-                pageSize={pageSize}
-                totalCount={totalCount}
-                onPageChange={(page) => setCurrentPage(page)}
-                onPageSizeChange={(size) => {
-                    setPageSize(size);
-                    setCurrentPage(1);
-                }}
-                onSortChange={handleSortChange}
-            />
+
+
         </>
     );
 };
