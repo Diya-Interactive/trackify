@@ -39,7 +39,7 @@ const Login: React.FC = () => {
   const {
     otp,
     formData: { email },
-  } = useAppSelector((state) => state.login);
+  } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     if (delayCounter <= 0) {

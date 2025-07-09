@@ -2,6 +2,9 @@ import type {
     LoginFormData,
     LoginFormErrors,
     LoginFormMessages,
+    RegisterFormData,
+    RegisterFormErrors,
+    RegisterFormMessages,
 } from "../types/Form";
 
 export function getErrorMessage(error: unknown): string {
@@ -61,3 +64,46 @@ export const validateFormData = (
         firstInvalidField,
     };
 };
+
+
+export const validateRegisterFormData = (
+    formData: RegisterFormData
+): {
+    isValid: boolean;
+    errors: RegisterFormErrors;
+    messages: RegisterFormMessages;
+    firstInvalidField?: keyof RegisterFormErrors;
+} => {
+    const { email, name } = formData;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const isEmailValid = emailRegex.test(email || "");
+    const isNameValid = (name || "").trim().length >= 2;
+
+    const errors: RegisterFormErrors = {
+        email: !isEmailValid,
+        name: !isNameValid
+    };
+
+    const messages: RegisterFormMessages = {};
+    let firstInvalidField: keyof RegisterFormErrors | undefined;
+
+    if (!isEmailValid) {
+        messages.email = "Please enter a valid email address";
+        firstInvalidField = "email";
+    }
+
+    if (!isNameValid) {
+        messages.name = "Name must be at least 2 characters long";
+        firstInvalidField = firstInvalidField || "name";
+    }
+
+    return {
+        isValid: isEmailValid && isNameValid,
+        errors,
+        messages,
+        firstInvalidField,
+    };
+};
+

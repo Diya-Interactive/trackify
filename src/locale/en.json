@@ -23,5 +23,8 @@
     "enter_your_email_to_search_for_your_account": "Please enter your email address to search for your account.",
     "search": "Search",
     "cancel": "Cancel",
-    "register_to_account": "Register to your account"
+    "register_to_account": "Register to your account",
+    "name": "Name",
+    "enter_name": "Enter your name",
+    "register": "Register"
 }

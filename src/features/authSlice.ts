@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 interface AuthState {
     formData: {
+        name:string;
         email: string;
     };
     otp: string[];
@@ -10,6 +11,7 @@ interface AuthState {
 
 const initialState: AuthState = {
     formData: {
+        name: "",
         email: "",
     },
     otp: new Array(6).fill(""),
@@ -57,6 +59,7 @@ const AuthSlice = createSlice({
         },
         clearFormData: (state) => {
             state.formData = {
+                name: "",
                 email: "",
             };
             state.otp = new Array(6).fill("");
